@@ -8,13 +8,13 @@
     creates: /etc/kubernetes/pki/{{ item }}.key
   loop:
     - ca
-#   - front-proxy-ca
+    - front-proxy-ca
   run_once: true
   delegate_to: "{{ groups['k8s_masters'][0] }}"
 
 - name: Generate API certificat SANS
   shell: /usr/local/bin/kubeadm init phase certs {{ item }} \
-         --apiserver-cert-extra-sans {{ certificat_apiserver_extra_sans | trim(",") }},{{ haproxy_vip }},10.32.0.1,127.0.0.1
+         --apiserver-cert-extra-sans {{ certificat_apiserver_extra_sans | trim(",") }},{{ haproxy_vip }},{{ k8s_cluster_internal_ip }},127.0.0.1
   args:
     chdir: /etc/kubernetes/pki
     creates: /etc/kubernetes/pki/{{ item }}.key
@@ -30,7 +30,7 @@
     creates: /etc/kubernetes/pki/{{ item }}.key
   loop:
     - apiserver-kubelet-client
-#   - front-proxy-client
+    - front-proxy-client
   run_once: true
   delegate_to: "{{ groups['k8s_masters'][0] }}"
 

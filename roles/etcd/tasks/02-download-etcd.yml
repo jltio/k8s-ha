@@ -1,32 +1,40 @@
 ---
-- name: Download etcd
-  get_url:
-    url: "{{ etcd_url }}/v{{ etcd_version }}/etcd-v{{ etcd_version }}-linux-amd64.tar.gz"
-    dest: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
-    mode: "0444"
+- name: Check if etcd if installed
+  shell: test -x /usr/local/bin/etcd && /usr/local/bin/etcd --version | grep -i "etcd version" | cut -d" " -f3 || exit 0
+  register: check_etcd_version
 
-- name: Extract etcd
-  unarchive:
-    src: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
-    dest: /tmp
-    remote_src: yes
+- block:
 
-- name: Copy etcd binaries in /usr/local/bin
-  copy:
-    src: /tmp/etcd-v{{ etcd_version }}-linux-amd64/{{ item }}
-    dest: /usr/local/bin/{{ item }}
-    remote_src: yes
-    owner: root
-    group: root
-    mode: "0755"
-  loop:
-    - etcd
-    - etcdctl
+  - name: Download etcd
+    get_url:
+      url: "{{ etcd_url }}/v{{ etcd_version }}/etcd-v{{ etcd_version }}-linux-amd64.tar.gz"
+      dest: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+      mode: "0444"
 
-- name: Clean files downloaded
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
-    - /tmp/etcd-v{{ etcd_version }}-linux-amd64
+  - name: Extract etcd
+    unarchive:
+      src: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+      dest: /tmp
+      remote_src: yes
+
+  - name: Copy etcd binaries in /usr/local/bin
+    copy:
+      src: /tmp/etcd-v{{ etcd_version }}-linux-amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}
+      remote_src: yes
+      owner: root
+      group: root
+      mode: "0755"
+    loop:
+      - etcd
+      - etcdctl
+
+  - name: Clean files downloaded
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+      - /tmp/etcd-v{{ etcd_version }}-linux-amd64
+
+  when: check_etcd_version.stdout != etcd_version

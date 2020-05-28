@@ -1,5 +1,13 @@
 ---
 k8s_version: v1.17.6
+# IPs pour les services
+# kubectl get services
+k8s_cluster_cidr: 10.32.0.0/16
+# IPS pour les PODs
+k8s_pods_cidr: 10.244.0.0/16
+
+k8s_cluster_internal_ip: 10.32.0.1
+k8s_dns_ip: 10.32.0.10
 
 etcd_cluster_urls: "{% for host in groups.etcd %}https://{{ hostvars[host].ansible_default_ipv4.address }}:2379,{% endfor %}"
 

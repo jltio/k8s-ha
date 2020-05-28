@@ -5,42 +5,8 @@
 
 - block:
 
-  ## From big tar.gz
-  # - name: Download k8s binaries
-  #   get_url:
-  #     url: https://dl.k8s.io/{{ k8s_version }}/kubernetes-server-linux-amd64.tar.gz
-  #     dest: /tmp/kubernetes-server-linux-amd64.tar.gz
-  #     owner: root
-  #     group: root
-  #     mode: "0755"
-
-  # - name: Extract archive
-  #   unarchive:
-  #     src: /tmp/kubernetes-server-linux-amd64.tar.gz
-  #     dest: /tmp
-  #     remote_src: yes
-
-  # - name: Install binaries in /usr/local/bin
-  #   copy:
-  #     src: /tmp/kubernetes/server/bin/{{ item }}
-  #     dest: /usr/local/bin/{{ item }}
-  #     owner: root
-  #     group: root
-  #     mode: "0755"
-  #     remote_src: yes
-  #   loop:
-  #     - kube-apiserver
-  #     - kube-controller-manager
-  #     - kube-scheduler
-  #     - kubeadm
-  #     - kubectl
-  #     - kubelet
-  #     - kube-proxy
-
-  # TODO: Clean
-
   ## Binaries by binaries
-  - name: Download k8s binaries
+  - name: Download k8s master binaries
     get_url:
       url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
       dest: /usr/local/bin/{{ item }}
@@ -51,10 +17,21 @@
       - kube-apiserver
       - kube-controller-manager
       - kube-scheduler
-      - kubeadm
       - kubectl
+      - kubeadm
+    when: inventory_hostname in groups['k8s_masters']
+
+  - name: Download k8s worker binaries
+    get_url:
+      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}
+      owner: root
+      group: root
+      mode: "0755"
+    loop:
       - kubelet
       - kube-proxy
+    when: inventory_hostname in groups['k8s_workers']
 
   when: check_k8s_version.stdout != k8s_version
 

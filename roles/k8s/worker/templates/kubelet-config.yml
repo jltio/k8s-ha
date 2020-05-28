@@ -15,7 +15,7 @@ authorization:
     cacheAuthorizedTTL: 0s
     cacheUnauthorizedTTL: 0s
 clusterDNS:
-  - 10.32.0.10
+  - {{ k8s_dns_ip }}
 clusterDomain: cluster.local
 cgroupDriver: systemd
 cgroupRoot: /
@@ -29,7 +29,7 @@ imageMinimumGCAge: 0s
 kubeletCgroups: /systemd/system.slice
 nodeStatusReportFrequency: 0s
 nodeStatusUpdateFrequency: 0s
-podCIDR: 10.1.0.0/16
+podCIDR: {{ k8s_pods_cidr }}
 rotateCertificates: false
 runtimeRequestTimeout: 0s
 serverTLSBootstrap: false

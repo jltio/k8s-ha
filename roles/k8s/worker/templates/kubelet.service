@@ -7,7 +7,10 @@ After=network-online.target
 [Service]
 ExecStart=/usr/local/bin/kubelet \
           --config=/etc/kubernetes/kubelet-config.yaml \
-          --kubeconfig=/etc/kubernetes/kubelet.conf
+          --kubeconfig=/etc/kubernetes/kubelet.conf \
+          --network-plugin=cni \
+          --runtime-cgroups=/systemd/system.slice \
+          --kubelet-cgroups=/systemd/system.slice
 Restart=always
 StartLimitInterval=0
 RestartSec=10

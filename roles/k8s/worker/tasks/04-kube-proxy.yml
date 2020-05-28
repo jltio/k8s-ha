@@ -14,8 +14,8 @@
     owner: root
     group: root
     mode: "0644"
-# notify:
-#   - Restart kube-proxy
+  notify:
+    - Restart kube-proxy
 
 - name: Reload systemd
   systemd:

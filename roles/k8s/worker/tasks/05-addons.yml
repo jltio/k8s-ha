@@ -1,0 +1,33 @@
+---
+- name: Copy addons files
+  template:
+    src: addons/{{ item }}
+    dest: /tmp/{{ item }}
+  loop:
+    - flannel.yml
+    - coredns.yml
+    - traefik.yml
+  run_once: yes
+  delegate_to: "{{ groups['k8s_masters'][0] }}"
+
+- name: Install addons
+  command: /usr/local/bin/kubectl apply \
+           --kubeconfig=/etc/kubernetes/admin.conf \
+           --filename=/tmp/{{ item }}
+  loop:
+    - flannel.yml
+    - coredns.yml
+    - traefik.yml
+  run_once: yes
+  delegate_to: "{{ groups['k8s_masters'][0] }}"
+
+- name: Delete addons files
+  file:
+    path: /tmp/{{ item }}
+    state: absent
+  loop:
+    - flannel.yml
+    - coredns.yml
+    - traefik.yml
+  run_once: yes
+  delegate_to: "{{ groups['k8s_masters'][0] }}"

@@ -11,4 +11,5 @@
 - hosts:
     - k8s_masters
   roles:
+    - cfssl
     - k8s/master

@@ -1,0 +1,11 @@
+---
+- name: Install some packages
+  yum:
+    name:
+      - wget
+      - ipset
+      - socat
+      - ipvsadm
+      - ebtables
+      - conntrack-tools
+    state: present

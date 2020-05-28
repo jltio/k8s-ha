@@ -1,0 +1,13 @@
+---
+# Uniquement sur le premier node etcd et master k8s
+- name: Download cfssl and cfssljson binaries
+  get_url:
+    url: "{{ cfssl_url }}/v{{ cfssl_version }}/{{ item }}_{{ cfssl_version }}_linux_amd64"
+    dest: /usr/local/bin/{{ item }}
+    mode: 0755
+  loop:
+    - cfssl
+    - cfssljson
+  run_once: true
+  delegate_to: "{{ inventory_hostname }}"
+  when: inventory_hostname == groups['etcd'][0] or inventory_hostname == groups['k8s_master'][0]

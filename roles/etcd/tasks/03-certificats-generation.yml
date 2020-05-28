@@ -1,16 +1,4 @@
 ---
-# Uniquement sur le premier node etcd
-- name: Download cfssl and cfssljson binaries
-  get_url:
-    url: "{{ cfssl_url }}/v{{ cfssl_version }}/{{ item }}_{{ cfssl_version }}_linux_amd64"
-    dest: /usr/local/bin/{{ item }}
-    mode: 0755
-  loop:
-    - cfssl
-    - cfssljson
-  run_once: true
-  delegate_to: "{{ groups['etcd'][0] }}"
-
 - name: Create /etc/ssl/etcd directory
   file:
     path: /etc/ssl/etcd

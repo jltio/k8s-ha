@@ -19,6 +19,8 @@
       - /etc/kubernetes
       - /var/lib/kubelet
       - /var/lib/kube-proxy
+      - /etc/cni
+      - /opt/cni
 
 - hosts:
     - k8s_masters

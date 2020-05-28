@@ -3,12 +3,7 @@
 - include_tasks: 01-etcd-user.yml
 
 # Téléchargement et installation
-- name: Check if etcd if installed
-  shell: test -x /usr/local/bin/etcd && /usr/local/bin/etcd --version | grep -i "etcd version" | cut -d" " -f3 || exit 0
-  register: check_etcd_version
-
 - include_tasks: 02-download-etcd.yml
-  when: check_etcd_version.stdout != etcd_version
 
 # Génération des certificats SSL
 - include_tasks: 03-certificats-generation.yml

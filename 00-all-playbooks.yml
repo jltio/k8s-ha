@@ -1,0 +1,6 @@
+---
+- import_playbook: 00-prereq.yml
+- import_playbook: 01-etcd.yml
+- import_playbook: 02-k8s-masters.yml
+- import_playbook: 03-haproxy.yml
+- import_playbook: 04-k8s-workers.yml

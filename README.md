@@ -41,8 +41,9 @@ Dans ce code, 8 serveurs sont utilisés avec les caratéristiques suivantes:
 
 Après installation du cluster, les POD disponibles seront:
 
-* CoreDNS (TODO)
-* Traefik Ingress Controler (TODO)
+* Flannel
+* CoreDNS
+* Traefik
 
 ![Schema](docs/schema-cluster-k8s.png)
 
@@ -95,7 +96,3 @@ Si on souhaite tout supprimer pour repartir de zéro
 ```bash
 ansible-playbook 99-delete-datas.yml
 ```
-
-## Installation de Traefik
-
-TODO

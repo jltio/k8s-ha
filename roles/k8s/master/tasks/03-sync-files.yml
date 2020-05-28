@@ -10,10 +10,10 @@
     - apiserver.crt
     - apiserver-kubelet-client.crt
     - apiserver-kubelet-client.key
-#   - front-proxy-ca.crt
-#   - front-proxy-ca.key
-#   - front-proxy-client.crt
-#   - front-proxy-client.key
+    - front-proxy-ca.crt
+    - front-proxy-ca.key
+    - front-proxy-client.crt
+    - front-proxy-client.key
     - sa.key
     - sa.pub
   register: certificates
@@ -34,7 +34,6 @@
     src: /etc/kubernetes/{{ item }}.conf
   loop:
     - admin
-#   - kubelet
     - scheduler
     - controller-manager
   register: configurations
