@@ -1,0 +1,50 @@
+---
+- name: Generate kubelet kubeconfig
+  shell: |
+    /usr/local/bin/kubectl config set-cluster kubernetes \
+    --kubeconfig=/etc/kubernetes/kubelet.conf \
+    --certificate-authority=/etc/kubernetes/pki/ca.crt \
+    --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_default_ipv4.address }}:6443 \
+    --embed-certs=true
+
+    /usr/local/bin/kubectl config set-credentials system:node:{{ inventory_hostname }} \
+    --kubeconfig=/etc/kubernetes/kubelet.conf \
+    --client-certificate=/etc/kubernetes/pki/{{ inventory_hostname }}.pem \
+    --client-key=/etc/kubernetes/pki/{{ inventory_hostname }}-key.pem \
+    --embed-certs=true
+
+    /usr/local/bin/kubectl config set-context system:node:{{ inventory_hostname }}@kubernetes \
+    --kubeconfig=/etc/kubernetes/kubelet.conf \
+    --cluster=kubernetes \
+    --user=system:node:{{ inventory_hostname }}
+
+    /usr/local/bin/kubectl config use-context system:node:{{ inventory_hostname }}@kubernetes \
+    --kubeconfig=/etc/kubernetes/kubelet.conf
+  args:
+    chdir: /etc/kubernetes
+    creates: /etc/kubernetes/kubelet.conf
+
+- name: Generate kube-proxy kubeconfig
+  shell: |
+      /usr/local/bin/kubectl config set-cluster kubernetes \
+      --kubeconfig=/etc/kubernetes/kube-proxy.conf \
+      --certificate-authority=/etc/kubernetes/pki/ca.crt \
+      --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_default_ipv4.address }}:6443 \
+      --embed-certs=true
+
+      /usr/local/bin/kubectl config set-credentials system:kube-proxy \
+      --kubeconfig=/etc/kubernetes/kube-proxy.conf \
+      --client-certificate=/etc/kubernetes/pki/kube-proxy.pem \
+      --client-key=/etc/kubernetes/pki/kube-proxy-key.pem \
+      --embed-certs=true
+
+      /usr/local/bin/kubectl config set-context system:kube-proxy@kubernetes \
+      --kubeconfig=/etc/kubernetes/kube-proxy.conf \
+      --cluster=kubernetes \
+      --user=system:kube-proxy
+
+      /usr/local/bin/kubectl config use-context system:kube-proxy@kubernetes \
+      --kubeconfig=/etc/kubernetes/kube-proxy.conf
+  args:
+    chdir: /etc/kubernetes
+    creates: /etc/kubernetes/kube-proxy.conf

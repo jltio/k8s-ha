@@ -1,0 +1,59 @@
+---
+- hosts:
+    - k8s_workers
+  tasks:
+  - name: Stop services
+    systemd:
+      name: "{{ item }}"
+      state: stopped
+    loop:
+      - docker
+      - kubelet
+      - kube-proxy
+
+  - name: Delete data
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - /etc/kubernetes
+      - /var/lib/kubelet
+      - /var/lib/kube-proxy
+
+- hosts:
+    - k8s_masters
+  tasks:
+  - name: Stop services
+    systemd:
+      name: "{{ item }}"
+      state: stopped
+    loop:
+      - kube-apiserver
+      - kube-scheduler
+      - kube-controller-manager
+
+  - name: Delete data
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - /etc/kubernetes
+
+- hosts:
+    - etcd
+  tasks:
+  - name: Stop services
+    systemd:
+      name: "{{ item }}"
+      state: stopped
+    loop:
+      - etcd
+
+  - name: Delete data
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - /etc/ssl/etcd
+      - /etc/etcd
+      - /var/lib/etcd

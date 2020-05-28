@@ -1,0 +1,28 @@
+---
+- name: Copy /etc/kubernetes/kube-proxy-config.yaml
+  template:
+    src: kube-proxy-config.yml
+    dest: /etc/kubernetes/kube-proxy-config.yaml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy services file
+  template:
+    src: kube-proxy.service
+    dest: /etc/systemd/system/kube-proxy.service
+    owner: root
+    group: root
+    mode: "0644"
+# notify:
+#   - Restart kube-proxy
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start kube-proxy services
+  systemd:
+    name: kube-proxy
+    state: started
+    enabled: yes
