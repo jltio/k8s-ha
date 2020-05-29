@@ -4,4 +4,4 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: /etc/kubernetes/kube-proxy.conf
 mode: ipvs
-clusterCIDR: {{ k8s_pods_cidr }}
+clusterCIDR: {{ k8s_cluster_cidr }}
