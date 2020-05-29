@@ -57,7 +57,7 @@ Fonctionne uniquement sur **CentOS 7**
 
 ### Préparation de l'inventaire
 
-Adapter le fichier `inventory/inventory.ini` pour y mettre les bonnes adresse IP. Changer aussi le fichier `inventory/group_vars/all.yml` pour mettre l'adresse IP virtuelle d'Haproxy.
+Copier le fichier `inventory/inventory.ini.sample` en `inventory\inventory.ini`. Adapter le fichier `inventory/inventory.ini` pour y mettre les bonnes adresse IP. Changer aussi le fichier `variables.yml` pour mettre l'adresse IP virtuelle d'Haproxy.
 
 Lancer le premier playbook
 
