@@ -5,6 +5,8 @@
 
 - hosts:
     - k8s_workers
+  pre_tasks:
+    - include_vars: variables.yml
   roles:
     - docker
     - k8s/worker

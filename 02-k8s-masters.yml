@@ -5,11 +5,15 @@
 
 - hosts:
     - k8s_cluster
+  pre_tasks:
+    - include_vars: variables.yml
   roles:
     - k8s/common
 
 - hosts:
     - k8s_masters
+  pre_tasks:
+    - include_vars: variables.yml
   roles:
     - cfssl
     - k8s/master

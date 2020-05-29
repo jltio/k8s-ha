@@ -1,6 +1,8 @@
 ---
 - hosts:
     - etcd
+  pre_tasks:
+    - include_vars: variables.yml
   roles:
     - cfssl
     - etcd

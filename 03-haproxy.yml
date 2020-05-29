@@ -5,5 +5,7 @@
 
 - hosts:
     - haproxy
+  pre_tasks:
+    - include_vars: variables.yml
   roles:
     - haproxy

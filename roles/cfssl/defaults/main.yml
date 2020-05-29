@@ -1,3 +1,2 @@
 ---
 cfssl_url: https://github.com/cloudflare/cfssl/releases/download
-cfssl_version: 1.4.1
