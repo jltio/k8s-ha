@@ -1,0 +1,96 @@
+---
+- block:
+
+  - name: Download k8s master binaries
+    get_url:
+      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      owner: root
+      group: root
+      mode: "0755"
+    loop:
+      - kubeadm
+      - kubectl
+      - kube-apiserver
+      - kube-controller-manager
+      - kube-scheduler
+
+  - name: Stop services
+    systemd:
+      name: "{{ item }}"
+      state: stopped
+    loop:
+      - kube-controller-manager
+      - kube-scheduler
+      - kube-apiserver
+
+  - name: Create links
+    file:
+      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      dest: /usr/local/bin/{{ item }}
+      owner: root
+      group: root
+      mode: "0755"
+      state: link
+    loop:
+      - kubeadm
+      - kubectl
+      - kube-apiserver
+      - kube-controller-manager
+      - kube-scheduler
+
+  - name: Start services
+    systemd:
+      name: "{{ item }}"
+      state: started
+    loop:
+      - kube-apiserver
+      - kube-scheduler
+      - kube-controller-manager
+
+  when: inventory_hostname in groups['k8s_masters']
+
+- block:
+
+  - name: Download k8s worker binaries
+    get_url:
+      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      owner: root
+      group: root
+      mode: "0755"
+    loop:
+      - kubectl
+      - kubelet
+      - kube-proxy
+
+  - name: Stop services
+    systemd:
+      name: "{{ item }}"
+      state: stopped
+    loop:
+      - kube-proxy
+      - kubelet
+
+  - name: Create links
+    file:
+      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      dest: /usr/local/bin/{{ item }}
+      owner: root
+      group: root
+      mode: "0755"
+      state: link
+    loop:
+      - kubectl
+      - kubelet
+      - kube-proxy
+
+  - name: Start services
+    systemd:
+      name: "{{ item }}"
+      state: started
+    loop:
+      - kubelet
+      - kube-proxy
+
+  when: inventory_hostname in groups['k8s_workers']
