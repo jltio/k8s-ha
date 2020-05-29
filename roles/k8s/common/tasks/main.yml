@@ -1,7 +1,9 @@
 ---
-- name: Check if k8S if installed
-  shell: test -x /usr/local/bin/kube-apiserver && /usr/local/bin/kube-apiserver --version | cut -d" " -f2 || exit 0
-  register: check_k8s_version
+# - name: Check if k8S if installed
+#   shell: test -x /usr/local/bin/kube-apiserver && /usr/local/bin/kube-apiserver --version | cut -d" " -f2 || exit 0
+#   register: check_k8s_version
+
+# - block
 
 - block:
 
@@ -9,31 +11,65 @@
   - name: Download k8s master binaries
     get_url:
       url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
-      dest: /usr/local/bin/{{ item }}
+      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
       owner: root
       group: root
       mode: "0755"
     loop:
+      - kubeadm
+      - kubectl
       - kube-apiserver
       - kube-controller-manager
       - kube-scheduler
-      - kubectl
-      - kubeadm
-    when: inventory_hostname in groups['k8s_masters']
 
-  - name: Download k8s worker binaries
-    get_url:
-      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
+  - name: Create links
+    file:
+      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
       dest: /usr/local/bin/{{ item }}
       owner: root
       group: root
       mode: "0755"
+      state: link
     loop:
+      - kubeadm
+      - kubectl
+      - kube-apiserver
+      - kube-controller-manager
+      - kube-scheduler
+
+  when: inventory_hostname in groups['k8s_masters']
+
+- block:
+
+  ## Binaries by binaries
+  - name: Download k8s worker binaries
+    get_url:
+      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      owner: root
+      group: root
+      mode: "0755"
+    loop:
+      - kubectl
       - kubelet
       - kube-proxy
-    when: inventory_hostname in groups['k8s_workers']
 
-  when: check_k8s_version.stdout != k8s_version
+  - name: Create links
+    file:
+      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      dest: /usr/local/bin/{{ item }}
+      owner: root
+      group: root
+      mode: "0755"
+      state: link
+    loop:
+      - kubectl
+      - kubelet
+      - kube-proxy
+
+  when: inventory_hostname in groups['k8s_workers']
+
+# when: check_k8s_version.stdout != k8s_version
 
 - name: Create /etc/kubernetes directory
   file:
