@@ -1,6 +1,6 @@
 # Cluster k8s HA
 
-Depuis le projet initial [k3s-ha-etcd](https://github.com/jthiry50/k8s-ha)
+Depuis le projet initial [k3s-ha-etcd](https://github.com/jltio/k3s-ha-etcd)
 
 ## Description du projet
 
