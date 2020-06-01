@@ -6,8 +6,8 @@
     systemd:
       name: "{{ item }}"
       state: stopped
+      enabled: no
     loop:
-      - docker
       - kubelet
       - kube-proxy
 
@@ -17,10 +17,30 @@
       state: absent
     loop:
       - /etc/kubernetes
+      - /var/lib/cni
       - /var/lib/kubelet
       - /var/lib/kube-proxy
       - /etc/cni
       - /opt/cni
+
+  - name: Start Docker service for prune
+    systemd:
+      name: docker
+      state: started
+
+  - name: Docker system prune all
+    shell: docker system prune -a -f
+
+  - name: Stop Docker service
+    systemd:
+      name: docker
+      state: stopped
+      enabled: no
+
+  - name: Reboot
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
 
 - hosts:
     - k8s_masters
@@ -29,6 +49,7 @@
     systemd:
       name: "{{ item }}"
       state: stopped
+      enabled: no
     loop:
       - kube-apiserver
       - kube-scheduler
@@ -48,6 +69,7 @@
     systemd:
       name: "{{ item }}"
       state: stopped
+      enabled: no
     loop:
       - etcd
 
@@ -59,3 +81,8 @@
       - /etc/ssl/etcd
       - /etc/etcd
       - /var/lib/etcd
+
+  - name: Reboot
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
