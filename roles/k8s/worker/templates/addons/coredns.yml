@@ -97,21 +97,21 @@ spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: coredns
       tolerations:
-        - key: "CriticalAddonsOnly"
-          operator: "Exists"
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
       nodeSelector:
         kubernetes.io/os: linux
       affinity:
-         podAntiAffinity:
-           preferredDuringSchedulingIgnoredDuringExecution:
-           - weight: 100
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                   - key: k8s-app
-                     operator: In
-                     values: ["kube-dns"]
-               topologyKey: kubernetes.io/hostname
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: k8s-app
+                  operator: In
+                  values: ["kube-dns"]
+              topologyKey: kubernetes.io/hostname
       containers:
       - name: coredns
         image: coredns/coredns:1.6.7
@@ -161,12 +161,12 @@ spec:
             scheme: HTTP
       dnsPolicy: Default
       volumes:
-        - name: config-volume
-          configMap:
-            name: coredns
-            items:
-            - key: Corefile
-              path: Corefile
+      - name: config-volume
+        configMap:
+          name: coredns
+          items:
+          - key: Corefile
+            path: Corefile
 ---
 apiVersion: v1
 kind: Service

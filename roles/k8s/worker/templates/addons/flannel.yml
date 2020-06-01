@@ -11,14 +11,14 @@ metadata:
 spec:
   privileged: false
   volumes:
-    - configMap
-    - secret
-    - emptyDir
-    - hostPath
+  - configMap
+  - secret
+  - emptyDir
+  - hostPath
   allowedHostPaths:
-    - pathPrefix: "/etc/cni/net.d"
-    - pathPrefix: "/etc/kube-flannel"
-    - pathPrefix: "/run/flannel"
+  - pathPrefix: "/etc/cni/net.d"
+  - pathPrefix: "/etc/kube-flannel"
+  - pathPrefix: "/run/flannel"
   readOnlyRootFilesystem: false
   # Users and groups
   runAsUser:
@@ -56,24 +56,24 @@ rules:
     verbs: ['use']
     resourceNames: ['psp.flannel.unprivileged']
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - pods
+    - pods
     verbs:
-      - get
+    - get
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - nodes
+    - nodes
     verbs:
-      - list
-      - watch
+    - list
+    - watch
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - nodes/status
+    - nodes/status
     verbs:
-      - patch
+    - patch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -153,15 +153,15 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
       hostNetwork: true
       tolerations:
       - operator: Exists
@@ -215,15 +215,15 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -247,15 +247,15 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - arm64
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - arm64
       hostNetwork: true
       tolerations:
       - operator: Exists
@@ -309,15 +309,15 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -341,15 +341,15 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - arm
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - arm
       hostNetwork: true
       tolerations:
       - operator: Exists
@@ -403,15 +403,15 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -435,15 +435,15 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - ppc64le
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
       hostNetwork: true
       tolerations:
       - operator: Exists
@@ -497,15 +497,15 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -529,15 +529,15 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/os
-                    operator: In
-                    values:
-                      - linux
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - s390x
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
       hostNetwork: true
       tolerations:
       - operator: Exists
@@ -591,12 +591,12 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg

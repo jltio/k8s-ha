@@ -1,4 +1,9 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: traefik
+---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -70,41 +75,41 @@ metadata:
   name: traefik-ingress-controller
 rules:
   - apiGroups:
-      - ""
+    - ""
     resources:
-      - services
-      - endpoints
-      - secrets
+    - services
+    - endpoints
+    - secrets
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
   - apiGroups:
-      - extensions
+    - extensions
     resources:
-      - ingresses
+    - ingresses
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
   - apiGroups:
-      - extensions
+    - extensions
     resources:
-      - ingresses/status
+    - ingresses/status
     verbs:
-      - update
+    - update
   - apiGroups:
-      - traefik.containo.us
+    - traefik.containo.us
     resources:
-      - middlewares
-      - ingressroutes
-      - traefikservices
-      - ingressroutetcps
-      - tlsoptions
+    - middlewares
+    - ingressroutes
+    - traefikservices
+    - ingressroutetcps
+    - tlsoptions
     verbs:
-      - get
-      - list
-      - watch
+    - get
+    - list
+    - watch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -117,78 +122,89 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: traefik-ingress-controller
-    namespace: default
+    namespace: traefik
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
- name: traefik-ingress-controller
- namespace: default
+  name: traefik-ingress-controller
+  namespace: traefik
 ---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
- name: traefik-ingress-controller
- labels:
-   k8s-app: traefik-ingress-lb
-   kubernetes.io/cluster-service: "true"
+  name: traefik-ingress-controller
+  namespace: traefik
+  labels:
+    k8s-app: traefik-ingress-lb
+    kubernetes.io/cluster-service: "true"
 spec:
- selector:
-   matchLabels:
+  selector:
+    matchLabels:
       k8s-app: traefik-ingress-lb
- template:
-   metadata:
-     labels:
-       k8s-app: traefik-ingress-lb
-       name: traefik-ingress-lb
-   spec:
-     hostNetwork: true
-     dnsPolicy: ClusterFirstWithHostNet
-     serviceAccountName: traefik-ingress-controller
-     terminationGracePeriodSeconds: 60
-     tolerations:
-     - key: node-role.kubernetes.io/master
-       effect: NoSchedule
-     containers:
-     - image: traefik:v2.1.1
-       name: traefik-ingress-lb
-       imagePullPolicy: Always
-       volumeMounts:
-         - mountPath: "/cert/"
-           name: cert
-       resources:
-         requests:
-           cpu: 100m
-           memory: 20Mi
-       args:
-       - --providers.kubernetescrd
-       - --entrypoints.web.address=:80
-       - --entrypoints.websecure.address=:443
-       - --api.insecure
-       - --certificatesresolvers.le.acme.email=email@email.com
-       - --certificatesresolvers.le.acme.storage=/cert/acme.json
-       - --certificatesResolvers.le.acme.httpChallenge.entryPoint=web
-     volumes:
-     - name: cert
-       hostPath:
-         path: /etc/ssl/certs/
-         type: Directory
+  template:
+    metadata:
+      namespace: traefik
+      labels:
+        k8s-app: traefik-ingress-lb
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - image: traefik:v2.1.1
+        name: traefik-ingress-lb
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: "/cert/"
+          name: cert
+        resources:
+          requests:
+            cpu: 100m
+            memory: 20Mi
+        args:
+        - --providers.kubernetescrd
+        - --entrypoints.web.address=:80
+        - --entrypoints.websecure.address=:443
+        - --api.insecure
+        - --certificatesresolvers.le.acme.email=email@email.com
+        - --certificatesresolvers.le.acme.storage=/cert/acme.json
+        - --certificatesResolvers.le.acme.httpChallenge.entryPoint=web
+      volumes:
+      - name: cert
+        hostPath:
+          path: /etc/ssl/certs/
+          type: Directory
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: traefik-web-ui
+  namespace: traefik
+  name: traefik-ingress-lb
 spec:
- selector:
-   k8s-app: traefik-ingress-lb
-   app: traefik-ingress-lb
- ports:
- - port: 8080
-   targetPort: 8080
-   name: api
- - port: 443
-   targetPort: 443
-   name: websecure
- - port: 80
-   targetPort: 80
-   name: web
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+  - name: websecure
+    port: 443
+    targetPort: 443
+  - name: web
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: traefik
+  name: traefik-web-ui
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+  - name: api
+    port: 8080
+    targetPort: 8080
