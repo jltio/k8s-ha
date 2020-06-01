@@ -7,6 +7,8 @@
     - flannel.yml
     - coredns.yml
     - traefik.yml
+    - metallb.yml
+    - local-path-storage.yml
   run_once: yes
   delegate_to: "{{ groups['k8s_masters'][0] }}"
 
@@ -18,6 +20,8 @@
     - flannel.yml
     - coredns.yml
     - traefik.yml
+    - metallb.yml
+    - local-path-storage.yml
   run_once: yes
   delegate_to: "{{ groups['k8s_masters'][0] }}"
 
@@ -29,5 +33,7 @@
     - flannel.yml
     - coredns.yml
     - traefik.yml
+    - metallb.yml
+    - local-path-storage.yml
   run_once: yes
   delegate_to: "{{ groups['k8s_masters'][0] }}"
