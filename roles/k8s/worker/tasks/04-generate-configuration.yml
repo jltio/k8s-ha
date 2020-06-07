@@ -4,7 +4,7 @@
     /usr/local/bin/kubectl config set-cluster kubernetes \
     --kubeconfig=/etc/kubernetes/kubelet.conf \
     --certificate-authority=/etc/kubernetes/pki/ca.crt \
-    --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_default_ipv4.address }}:6443 \
+    --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_host }}:6443 \
     --embed-certs=true
 
     /usr/local/bin/kubectl config set-credentials system:node:{{ inventory_hostname }} \
@@ -29,7 +29,7 @@
       /usr/local/bin/kubectl config set-cluster kubernetes \
       --kubeconfig=/etc/kubernetes/kube-proxy.conf \
       --certificate-authority=/etc/kubernetes/pki/ca.crt \
-      --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_default_ipv4.address }}:6443 \
+      --server=https://{{ hostvars[groups['k8s_masters'][0]].ansible_host }}:6443 \
       --embed-certs=true
 
       /usr/local/bin/kubectl config set-credentials system:kube-proxy \

@@ -47,6 +47,16 @@ Après installation du cluster, les POD disponibles seront:
 
 ![Schema](docs/schema-cluster-k8s.png)
 
+## Provisionner les serveurs avec Vagrant
+
+Ce projet inclut un fichier `Vagranfile` pour VirtualBox pour créer les 8 serveurs. Le fichier `inventory/inventory.ini.sample` est cohérent avec la description du fichier `Vagranfile`.
+
+Création des serveurs
+
+```bash
+vagrant up
+```
+
 ## Lancement des Playbooks Ansible
 
 Ce projet fonctionne sur **Ansible version 2.9**
@@ -57,7 +67,13 @@ Fonctionne uniquement sur **CentOS 7**
 
 ### Préparation de l'inventaire
 
-Copier le fichier `inventory/inventory.ini.sample` en `inventory\inventory.ini`. Adapter le fichier `inventory/inventory.ini` pour y mettre les bonnes adresse IP. Changer aussi le fichier `variables.yml` pour mettre l'adresse IP virtuelle d'Haproxy.
+Copier le fichier `inventory/inventory.ini.sample` en `inventory/inventory.ini`. Adapter le fichier `inventory/inventory.ini` si nécessaire pour y mettre les bonnes adresse IP. Changer aussi le fichier `variables.yml` pour mettre l'adresse IP virtuelle d'Haproxy. Si vous avez utilisez `Vagranfile`, pas besoin de changer le fichier `inventory/inventory.ini`.
+
+Tester la connexion sur tout les serveurs avec Ansible
+
+```bash
+ansible-playbook 99-test-connection.yml
+```
 
 Lancer le premier playbook
 

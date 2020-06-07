@@ -31,7 +31,7 @@
 
 - name: Waiting API is UP
   wait_for:
-    host: "{{ hostvars[groups['k8s_masters'][0]].ansible_default_ipv4.address }}"
+    host: "{{ hostvars[groups['k8s_masters'][0]].ansible_host }}"
     port: 6443
 
 - name: Enable and start kubernetes services (all servers)

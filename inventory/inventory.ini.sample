@@ -1,13 +1,15 @@
 # Liste de tous les serveurs + leurs IP
+# Exemple suivant provisionné avec Vagrant
+# vagrant up
 [all_servers]
-k8s-master01 ansible_host=192.168.122.1
-k8s-master02 ansible_host=192.168.122.2
-k8s-master03 ansible_host=192.168.122.3
-k8s-worker01 ansible_host=192.168.122.11
-k8s-worker02 ansible_host=192.168.122.12
-k8s-worker03 ansible_host=192.168.122.13
-haproxy01 ansible_host=192.168.122.101
-haproxy02 ansible_host=192.168.122.102
+k8s-master01 ansible_host=192.168.100.101
+k8s-master02 ansible_host=192.168.100.102
+k8s-master03 ansible_host=192.168.100.103
+k8s-worker01 ansible_host=192.168.100.111
+k8s-worker02 ansible_host=192.168.100.112
+k8s-worker03 ansible_host=192.168.100.113
+haproxy01 ansible_host=192.168.100.121
+haproxy02 ansible_host=192.168.100.122
 
 # Tous les serveurs constituant le cluster k8s
 [k8s_cluster:children]

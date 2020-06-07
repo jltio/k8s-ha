@@ -1,4 +1,4 @@
 ---
 etcd_url: https://github.com/etcd-io/etcd/releases/download
-etcd_cluster_urls: "{% for host in groups.etcd %}{{ host }}=https://{{ hostvars[host].ansible_default_ipv4.address }}:2380,{% endfor %}"
-etcd_cluster_hosts: "{% for host in groups.etcd %}{{ hostvars[host].ansible_default_ipv4.address }},{% endfor %}"
+etcd_cluster_urls: "{% for host in groups.etcd %}{{ host }}=https://{{ hostvars[host].ansible_host }}:2380,{% endfor %}"
+etcd_cluster_hosts: "{% for host in groups.etcd %}{{ hostvars[host].ansible_host }},{% endfor %}"

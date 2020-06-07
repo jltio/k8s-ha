@@ -1,7 +1,9 @@
 ---
 # Haproxy
-haproxy_vip: 192.168.122.254
-haproxy_vip_netmask: 192.168.122.255
+haproxy_vip: 192.168.100.254
+haproxy_vip_netmask: 192.168.100.255
+# Keepalived (avec Vagrant mettre eth1)
+interface: eth1
 # cfssl
 cfssl_version: 1.4.1
 # ectd
@@ -16,4 +18,4 @@ k8s_pods_cidr: 10.244.0.0/22
 # IP cluster et DNS (Attention ne pas avoir d'overlapping avec cluster et pods cidr)
 k8s_cluster_internal_ip: 10.32.0.1
 k8s_dns_ip: 10.32.0.10
-k8s_metallb_range: 192.168.122.240-192.168.122.250
+k8s_metallb_range: 192.168.100.240-192.168.100.250
