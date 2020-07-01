@@ -4,12 +4,13 @@ Vagrant.configure(2) do |config|
   config.ssh.insert_key = false
   config.ssh.private_key_path = ["~/.vagrant.d/insecure_private_key", "~/.ssh/id_rsa"]
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   create_user = <<-SHELL
   groupadd centos
   useradd -d /home/centos -g centos -m -s /bin/bash centos
   echo "centos ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/centos
-  mkdir /home/centos/.ssh
+  mkdir -p /home/centos/.ssh
   chown centos.centos /home/centos/.ssh
   chmod 700 /home/centos/.ssh
   cp /home/vagrant/.ssh/authorized_keys /home/centos/.ssh/authorized_keys
