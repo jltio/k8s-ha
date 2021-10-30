@@ -8,7 +8,8 @@ Depuis le projet initial [k3s-ha-etcd](https://github.com/jltio/k3s-ha-etcd)
 
 En se basant sur les projets et documentations:
 
-* [K3S Ansible](https://github.com/rancher/k3s-ansible)
+* [K3S Ansible](https://github.com/k3s-io/k3s-ansible)
+* [Kubespray](https://github.com/kubernetes-sigs/kubespray)
 * [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 * [Exemple Haproxy](https://gitlab.com/xavki/presentations-kubernetes/-/tree/master/37-kubspray-haproxy)
 * [Installation Traefik](https://blog.wescale.fr/2020/03/06/traefik-2-reverse-proxy-dans-kubernetes/)
@@ -49,12 +50,20 @@ Après installation du cluster, les POD disponibles seront:
 
 ## Provisionner les serveurs avec Vagrant
 
-Ce projet inclut un fichier `Vagranfile` pour VirtualBox pour créer les 8 serveurs. Le fichier `inventory/inventory.ini.sample` est cohérent avec la description du fichier `Vagranfile`.
+Pour faire des tests sur un poste de travail, ce projet inclut un fichier `Vagranfile` pour VirtualBox pour créer les 8 serveurs. Le fichier `inventory/inventory.ini.sample` est cohérent avec la description du fichier `Vagranfile`.
+
+L'image CentOS 7 utilisée par Vagrant est [ici](https://app.vagrantup.com/centos/boxes/7)
 
 Création des serveurs
 
 ```bash
 vagrant up
+```
+
+Suppression des serveurs
+
+```bash
+vagrant destroy -f
 ```
 
 ## Lancement des Playbooks Ansible
@@ -64,6 +73,8 @@ Ce projet fonctionne sur **Ansible version 2.9**
 Avant de lancer, se connecter sur les 8 serveurs via SSH avec une clé SSH ne demandant pas de mot de passe (sans passphrase ou ssh-agent)
 
 Fonctionne uniquement sur **CentOS 7**
+
+Pour installer Ansible utiliser le script `contrib/install-ansible.sh`.
 
 ### Préparation de l'inventaire
 

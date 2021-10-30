@@ -1,5 +1,6 @@
 Vagrant.configure(2) do |config|
 
+  # https://app.vagrantup.com/centos/boxes/7
   config.vm.box = "centos/7"
   config.ssh.insert_key = false
   config.ssh.private_key_path = ["~/.vagrant.d/insecure_private_key", "~/.ssh/id_rsa"]

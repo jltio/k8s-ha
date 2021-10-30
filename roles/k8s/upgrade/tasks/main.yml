@@ -3,8 +3,8 @@
 
   - name: Download k8s master binaries
     get_url:
-      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
-      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      url: https://storage.googleapis.com/kubernetes-release/release/v{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}.v{{ k8s_version }}
       owner: root
       group: root
       mode: "0755"
@@ -26,7 +26,7 @@
 
   - name: Create links
     file:
-      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      src: /usr/local/bin/{{ item }}.v{{ k8s_version }}
       dest: /usr/local/bin/{{ item }}
       owner: root
       group: root
@@ -54,8 +54,8 @@
 
   - name: Download k8s worker binaries
     get_url:
-      url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}
-      dest: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      url: https://storage.googleapis.com/kubernetes-release/release/v{{ k8s_version }}/bin/linux/amd64/{{ item }}
+      dest: /usr/local/bin/{{ item }}.v{{ k8s_version }}
       owner: root
       group: root
       mode: "0755"
@@ -74,7 +74,7 @@
 
   - name: Create links
     file:
-      src: /usr/local/bin/{{ item }}.{{ k8s_version }}
+      src: /usr/local/bin/{{ item }}.v{{ k8s_version }}
       dest: /usr/local/bin/{{ item }}
       owner: root
       group: root

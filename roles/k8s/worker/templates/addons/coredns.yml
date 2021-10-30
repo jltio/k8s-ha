@@ -12,22 +12,23 @@ metadata:
     kubernetes.io/bootstrapping: rbac-defaults
   name: system:coredns
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  - services
-  - pods
-  - namespaces
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - nodes
-  verbs:
-  - get
+  - apiGroups:
+    - ""
+    resources:
+    - endpoints
+    - services
+    - pods
+    - namespaces
+    verbs:
+    - list
+    - watch
+  - apiGroups:
+    - discovery.k8s.io
+    resources:
+    - endpointslices
+    verbs:
+    - list
+    - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -97,24 +98,24 @@ spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: coredns
       tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
       nodeSelector:
         kubernetes.io/os: linux
       affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: k8s-app
-                  operator: In
-                  values: ["kube-dns"]
-              topologyKey: kubernetes.io/hostname
+         podAntiAffinity:
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 100
+             podAffinityTerm:
+               labelSelector:
+                 matchExpressions:
+                   - key: k8s-app
+                     operator: In
+                     values: ["kube-dns"]
+               topologyKey: kubernetes.io/hostname
       containers:
       - name: coredns
-        image: coredns/coredns:1.6.7
+        image: coredns/coredns:1.8.4
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -161,12 +162,12 @@ spec:
             scheme: HTTP
       dnsPolicy: Default
       volumes:
-      - name: config-volume
-        configMap:
-          name: coredns
-          items:
-          - key: Corefile
-            path: Corefile
+        - name: config-volume
+          configMap:
+            name: coredns
+            items:
+            - key: Corefile
+              path: Corefile
 ---
 apiVersion: v1
 kind: Service

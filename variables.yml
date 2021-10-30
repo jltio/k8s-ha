@@ -5,11 +5,13 @@ haproxy_vip_netmask: 192.168.100.255
 # Keepalived (avec Vagrant mettre eth1)
 interface: eth1
 # cfssl
-cfssl_version: 1.4.1
+cfssl_version: 1.6.1
 # ectd
-etcd_version: 3.4.8
+etcd_version: 3.5.0
+# cni
+cni_version: 1.0.1
 # k8s
-k8s_version: v1.17.6
+k8s_version: 1.22.3
 # IPs pour les services
 # kubectl get services
 k8s_cluster_cidr: 10.42.0.0/24
@@ -17,5 +19,5 @@ k8s_cluster_cidr: 10.42.0.0/24
 k8s_pods_cidr: 10.244.0.0/22
 # IP cluster et DNS (Attention ne pas avoir d'overlapping avec cluster et pods cidr)
 k8s_cluster_internal_ip: 10.32.0.1
-k8s_dns_ip: 10.32.0.10
+k8s_dns_ip: 10.42.0.10
 k8s_metallb_range: 192.168.100.240-192.168.100.250

@@ -10,6 +10,7 @@
     loop:
       - kubelet
       - kube-proxy
+      - docker
 
   - name: Delete data
     file:
