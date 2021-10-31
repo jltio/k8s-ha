@@ -4,4 +4,4 @@
   pre_tasks:
     - include_vars: variables.yml
   roles:
-    - centos
+    - prereq/centos
