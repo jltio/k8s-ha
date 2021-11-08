@@ -1,4 +1,8 @@
 ---
+- name: Get IP for {{ network_interface }}
+  set_fact:
+    _network_interface: "{% set _interface = 'ansible_' + network_interface %}{{ hostvars[inventory_hostname][_interface].ipv4.address }}"
+
 - name: Create etcd file configuration
   template:
     src: etcd.conf

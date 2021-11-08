@@ -2,10 +2,10 @@
 # https://github.com/justmeandopensource/kubernetes/blob/master/vagrant-provisioning/bootstrap.sh
 # https://github.com/kubernetes-retired/contrib/tree/master/ansible/roles/node/tasks
 
-# - name: Disable SELinux
-#   selinux:
-#     state: disabled
-#   register: selinux
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  register: selinux
 
 - name: Add br_netfilter to /etc/modules-load.d/
   copy:

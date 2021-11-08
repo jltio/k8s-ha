@@ -14,10 +14,11 @@ cni_version: 1.0.1
 k8s_version: 1.22.3
 # IPs pour les services
 # kubectl get services
-k8s_cluster_cidr: 10.42.0.0/24
+k8s_cluster_cidr: 10.42.0.0/16
 # IPS pour les PODs
 k8s_pods_cidr: 10.244.0.0/22
 # IP cluster et DNS (Attention ne pas avoir d'overlapping avec cluster et pods cidr)
-k8s_cluster_internal_ip: 10.32.0.1
+k8s_cluster_internal_ip: 10.42.0.1
 k8s_dns_ip: 10.42.0.10
 k8s_metallb_range: 192.168.100.240-192.168.100.250
+network_interface: ens5
